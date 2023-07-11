@@ -8,7 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Timer\AppTimer.cs" />
+    <Compile Remove="Models\AppTimer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
   </ItemGroup>
 
 </Project>
