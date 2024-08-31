@@ -1,0 +1,104 @@
+﻿<UserControl
+    x:Class="PomoWidget.HomeView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:local="clr-namespace:PomoWidget"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DataContext="{d:DesignInstance Type=local:HomeViewModel}"
+    d:DesignHeight="300"
+    d:DesignWidth="300"
+    mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <local:TimeStateToBooleanConverter x:Key="TimeStateToBooleanConverter" />
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.05*" />
+            <RowDefinition Height="0.1*" />
+            <RowDefinition Height="0.3*" />
+            <RowDefinition Height="0.2*" />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <Button
+                x:Name="SettingsButton"
+                Command="{Binding NavigateCommand}"
+                CommandParameter="Settings"
+                Content="Settings" />
+        </StackPanel>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <RadioButton
+                Name="FocusToggleButton"
+                Grid.Column="0"
+                Width="70"
+                Height="20"
+                Command="{Binding FocusCommand}"
+                Content="Focus"
+                IsChecked="{Binding TimeManager.TimeState, Converter={StaticResource TimeStateToBooleanConverter}, ConverterParameter={x:Static local:TimeState.Focus}, Mode=TwoWay}"
+                Style="{StaticResource {x:Type ToggleButton}}" />
+            <RadioButton
+                Name="ShortBreakToggleButton"
+                Grid.Column="1"
+                Width="70"
+                Height="20"
+                Command="{Binding ShortBreakCommand}"
+                Content="Short Break"
+                IsChecked="{Binding TimeManager.TimeState, Converter={StaticResource TimeStateToBooleanConverter}, ConverterParameter={x:Static local:TimeState.ShortBreak}, Mode=TwoWay}"
+                Style="{StaticResource {x:Type ToggleButton}}" />
+            <RadioButton
+                Name="LongBreakToggleButton"
+                Grid.Column="2"
+                Width="70"
+                Height="20"
+                Command="{Binding LongBreakCommand}"
+                Content="Long Break"
+                IsChecked="{Binding TimeManager.TimeState, Converter={StaticResource TimeStateToBooleanConverter}, ConverterParameter={x:Static local:TimeState.LongBreak}, Mode=TwoWay}"
+                Style="{StaticResource {x:Type ToggleButton}}" />
+        </Grid>
+        <TextBlock
+            Name="ClockTextBlock"
+            Grid.Row="2"
+            VerticalAlignment="Center"
+            FontSize="35"
+            Foreground="Red"
+            Text="{Binding Path=TimeManager.RemainingTime, StringFormat=mm\\:ss}"
+            TextAlignment="Center" />
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Button
+                Name="ResetButton"
+                Grid.Column="0"
+                Width="60"
+                Height="35"
+                Command="{Binding ResetCommand}"
+                Content="Reset" />
+            <ToggleButton
+                Name="StartToggleButton"
+                Grid.Column="1"
+                Width="60"
+                Height="35"
+                Command="{Binding StartStopCommand}"
+                Content="Start"
+                IsChecked="{Binding TimeManager.IsTimeRunning, Mode=OneWay}" />
+            <Button
+                Name="SkipButton"
+                Grid.Column="2"
+                Width="60"
+                Height="35"
+                Command="{Binding SkipCommand}"
+                Content="Skip" />
+        </Grid>
+    </Grid>
+</UserControl>
