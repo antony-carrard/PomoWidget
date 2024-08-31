@@ -29,7 +29,7 @@ public class TimeManager : INotifyPropertyChanged
 		{
 			Interval = TimeSpan.FromSeconds(1)
 		};
-		Timer.Tick += (sender, args) => OnPropertyChanged(nameof(RemainingTime));
+		Timer.Tick += Timer_Tick;
 	}
 
 	#endregion Constructor
@@ -157,12 +157,6 @@ public class TimeManager : INotifyPropertyChanged
 		}
 	}
 
-	public void IsCompleted()
-	{
-		if (Complete)
-			NextState();
-	}
-
 	public void Start()
 	{
 		Timer?.Start();
@@ -196,6 +190,13 @@ public class TimeManager : INotifyPropertyChanged
 	protected void OnPropertyChanged(string propertyName)
 	{
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+	}
+	private void Timer_Tick(object? sender, EventArgs e)
+	{
+		if (Complete)
+			NextState();
+		OnPropertyChanged(nameof(RemainingTime));
+		Start(); // TODO rajouter une option pour paramétrer le démarrage automatique
 	}
 
 	#endregion

@@ -45,6 +45,7 @@
             Maximum="90"
             Minimum="0"
             SelectedValue="{Binding LongBreakTime, Mode=TwoWay}" />
+        <!--TODO rajouter de la logique pour changer le format en fonction de si c'est un timespan ou un int-->
         <resources:SliderSettings
             Title="Rounds"
             Grid.Row="4"
