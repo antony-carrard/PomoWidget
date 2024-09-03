@@ -78,4 +78,9 @@ public class SettingsViewModel : ViewModelBase
 		LongBreakTime = timeManager.LongBreak.Minutes;
 		TotalRounds = timeManager.TotalRounds;
 	}
+
+	~SettingsViewModel()
+	{
+
+	}
 }

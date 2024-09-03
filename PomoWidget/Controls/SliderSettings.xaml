@@ -1,0 +1,79 @@
+﻿<UserControl x:Class="PomoWidget.SliderSettings"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:PomoWidget"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             x:Name="_sliderSettings"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
+             mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <!--  Define the ValueConverter  -->
+        <local:IntAndFormatToStringConverter x:Key="IntAndFormatToStringConverter" />
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!--  Title  -->
+        <TextBlock HorizontalAlignment="Center"
+                   Text="{Binding Title, ElementName=_sliderSettings}" />
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <!--  Decrement Button  -->
+            <Button Width="20"
+                    Click="Decrease_Click"
+                    Content="-"
+                    IsEnabled="{Binding CanDecrease, ElementName=_sliderSettings}" />
+
+            <!--  TextBox for Value Display and Editing  -->
+            <TextBox Grid.Column="1"
+                     HorizontalAlignment="Stretch"
+                     VerticalAlignment="Center"
+                     TextAlignment="Center">
+                <TextBox.Text>
+                    <MultiBinding Converter="{StaticResource IntAndFormatToStringConverter}">
+                        <Binding ElementName="_sliderSettings"
+                                 Path="SelectedValue" />
+                        <Binding ElementName="_sliderSettings"
+                                 Path="DisplayAsTimeSpan" />
+                    </MultiBinding>
+                </TextBox.Text>
+            </TextBox>
+            <!--  Validation.ErrorTemplate="{StaticResource ValidationErrorTemplate}" />  -->
+
+            <!--  Increment Button  -->
+            <Button Grid.Column="2"
+                    Width="20"
+                    Click="Increase_Click"
+                    Content="+"
+                    IsEnabled="{Binding CanIncrease, ElementName=_sliderSettings}" />
+
+        </Grid>
+
+        <!--  Validation Message  -->
+        <!--<TextBlock Grid.Row="2"
+                   Foreground="Red"
+                   Text="{Binding (Validation.Errors)[0].ErrorContent, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}" />-->
+
+        <!--  Slider  -->
+        <Slider Grid.Row="3"
+                Maximum="{Binding Maximum, ElementName=_sliderSettings}"
+                Minimum="{Binding Minimum, ElementName=_sliderSettings}"
+                Value="{Binding SelectedValue, Mode=TwoWay, ElementName=_sliderSettings}" />
+
+    </Grid>
+</UserControl>
