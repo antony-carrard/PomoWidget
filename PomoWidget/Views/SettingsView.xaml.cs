@@ -7,8 +7,14 @@ namespace PomoWidget;
 /// </summary>
 public partial class SettingsView : UserControl
 {
-    public SettingsView()
-    {
-        InitializeComponent();
-    }
+	public SettingsView()
+	{
+		InitializeComponent();
+		Loaded += SettingsView_Loaded;
 	}
+
+	private void SettingsView_Loaded(object sender, System.Windows.RoutedEventArgs e)
+	{
+		FocusSlider.Focus();
+	}
+}

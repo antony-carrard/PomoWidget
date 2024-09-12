@@ -17,6 +17,7 @@
             <RowDefinition />
             <RowDefinition />
             <RowDefinition />
+            <RowDefinition />
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0"
                     Orientation="Horizontal">
@@ -25,8 +26,9 @@
                     CommandParameter="Home"
                     Content="Back" />
         </StackPanel>
-        <!--  TODO rajouter les limites dymaniquement  -->
-        <local:SliderSettings Title="Focus"
+        <!--  TODO rajouter les limites dymaniquement (ou pas)  -->
+        <local:SliderSettings x:Name="FocusSlider"
+                              Title="Focus"
                               Grid.Row="1"
                               DisplayAsTimeSpan="True"
                               Maximum="90"
@@ -50,5 +52,11 @@
                               Maximum="10"
                               Minimum="1"
                               SelectedValue="{Binding TotalRounds, Mode=TwoWay}" />
+        <Button Grid.Row="5"
+                Padding="10,5"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Command="{Binding ResetDefaultCommand}"
+                Content="Reset Defaults" />
     </Grid>
 </UserControl>

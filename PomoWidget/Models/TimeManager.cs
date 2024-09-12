@@ -49,6 +49,10 @@ public class TimeManager : INotifyPropertyChanged
 					CurrentInterval = value;
 				}
 				_focusBreak = value;
+
+				// Save the values
+				Properties.Settings.Default.FocusTime = value;
+				Properties.Settings.Default.Save();
 			}
 		}
 	}
@@ -67,6 +71,10 @@ public class TimeManager : INotifyPropertyChanged
 					CurrentInterval = value;
 				}
 				_shortBreak = value;
+
+				// Save the values
+				Properties.Settings.Default.ShortBreakTime = value;
+				Properties.Settings.Default.Save();
 			}
 		}
 	}
@@ -85,12 +93,30 @@ public class TimeManager : INotifyPropertyChanged
 					CurrentInterval = value;
 				}
 				_longBreak = value;
+
+				// Save the values
+				Properties.Settings.Default.LongBreakTime = value;
+				Properties.Settings.Default.Save();
 			}
 		}
 	}
 	private TimeSpan _longBreak;
 
-	public int TotalRounds { get; set; }
+	public int TotalRounds
+	{
+		get => _totalRounds;
+		set
+		{
+			if (value != _totalRounds)
+			{
+				_totalRounds = value;
+
+				// Save the values
+				Properties.Settings.Default.RoundsNumber = value;
+				Properties.Settings.Default.Save();
+			}
+		}
+	}
 
 	public int CurrentRound { get; set; }
 
@@ -132,6 +158,7 @@ public class TimeManager : INotifyPropertyChanged
 		}
 	}
 	private TimeState _timeState = TimeState.Focus;
+	private int _totalRounds;
 
 	public event EventHandler StateChange;
 	public event PropertyChangedEventHandler? PropertyChanged;

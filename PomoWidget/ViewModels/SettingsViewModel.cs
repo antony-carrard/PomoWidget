@@ -15,7 +15,7 @@ public class SettingsViewModel : ViewModelBase
 			if (_focusTime != value)
 			{
 				_focusTime = value;
-				TimeManager.Focus = new TimeSpan(0, value, 0);
+				TimeManager.Focus = TimeSpan.FromMinutes(value);
 				OnPropertyChanged(nameof(FocusTime));
 			}
 		}
@@ -30,7 +30,7 @@ public class SettingsViewModel : ViewModelBase
 			if (_shortBreakTime != value)
 			{
 				_shortBreakTime = value;
-				TimeManager.ShortBreak = new TimeSpan(0, value, 0);
+				TimeManager.ShortBreak = TimeSpan.FromMinutes(value);
 				OnPropertyChanged(nameof(ShortBreakTime));
 			}
 		}
@@ -45,7 +45,7 @@ public class SettingsViewModel : ViewModelBase
 			if (_longBreakTime != value)
 			{
 				_longBreakTime = value;
-				TimeManager.LongBreak = new TimeSpan(0, value, 0);
+				TimeManager.LongBreak = TimeSpan.FromMinutes(value);
 				OnPropertyChanged(nameof(LongBreakTime));
 			}
 		}
@@ -68,19 +68,29 @@ public class SettingsViewModel : ViewModelBase
 	private int _totalRounds;
 
 	public ICommand NavigateCommand { get; }
+	public ICommand ResetDefaultCommand { get; }
 	public SettingsViewModel(TimeManager timeManager, NavigationService navigationService)
-        {
+	{
 		TimeManager = timeManager;
 		NavigateCommand = new NavigateCommand(navigationService);
+		ResetDefaultCommand = new RelayCommand(() => ResetDefault());
 
-		FocusTime = timeManager.Focus.Minutes;
-		ShortBreakTime = timeManager.ShortBreak.Minutes;
-		LongBreakTime = timeManager.LongBreak.Minutes;
+		FocusTime = (int)timeManager.Focus.TotalMinutes;
+		ShortBreakTime = (int)timeManager.ShortBreak.TotalMinutes;
+		LongBreakTime = (int)timeManager.LongBreak.TotalMinutes;
 		TotalRounds = timeManager.TotalRounds;
+	}
+
+	private void ResetDefault()
+	{
+		FocusTime = (int)Constants.DefaultFocusTime.TotalMinutes;
+		ShortBreakTime = (int)Constants.DefaultShortBreakTime.TotalMinutes;
+		LongBreakTime = (int)Constants.DefaultLongBreakTime.TotalMinutes;
+		TotalRounds = Constants.DefaultRoundsNumber;
 	}
 
 	~SettingsViewModel()
 	{
-
+		// TODO implémenter IDisposable...
 	}
 }

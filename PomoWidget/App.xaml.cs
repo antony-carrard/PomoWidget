@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using PomoWidget.Properties;
 
 namespace PomoWidget;
 
@@ -14,10 +15,10 @@ public partial class App : Application
     public App()
     {
         _timeManager = new TimeManager(
-            new TimeSpan(0, 25, 0),
-            new TimeSpan(0, 5, 0),
-            new TimeSpan(0, 15, 0),
-            4);   // TODO : maybe apply the parameters in the OnStartup method, to get the default parameters from the settings view.
+			Settings.Default.FocusTime,
+			Settings.Default.ShortBreakTime,
+			Settings.Default.LongBreakTime,
+			Settings.Default.RoundsNumber);
 			_navigationStore = new NavigationStore();
     }
 

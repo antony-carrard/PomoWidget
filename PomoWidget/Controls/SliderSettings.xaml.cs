@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace PomoWidget;
 
@@ -14,7 +15,9 @@ public partial class SliderSettings : UserControl, INotifyPropertyChanged
 	{
 		InitializeComponent();
 		UpdateButtonStates();
+		GotFocus += SliderSettings_GotFocus;
 	}
+
 	public int SelectedValue
 	{
 		get => (int)GetValue(SelectedValueProperty);
@@ -82,10 +85,12 @@ public partial class SliderSettings : UserControl, INotifyPropertyChanged
 	protected void OnPropertyChanged(string propertyName) =>
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
+	private void SliderSettings_GotFocus(object sender, RoutedEventArgs e) => MyMainGrid.Focus();
+
 	public bool CanDecrease => SelectedValue > Minimum;
 	public bool CanIncrease => SelectedValue < Maximum;
 
-	private void Decrease_Click(object sender, RoutedEventArgs e)
+	private void DecreaseValue()
 	{
 		if (CanDecrease)
 		{
@@ -94,7 +99,7 @@ public partial class SliderSettings : UserControl, INotifyPropertyChanged
 		}
 	}
 
-	private void Increase_Click(object sender, RoutedEventArgs e)
+	private void IncreaseValue()
 	{
 		if (CanIncrease)
 		{
@@ -103,9 +108,45 @@ public partial class SliderSettings : UserControl, INotifyPropertyChanged
 		}
 	}
 
+	private void Decrease_Click(object sender, RoutedEventArgs e) => DecreaseValue();
+
+	private void Increase_Click(object sender, RoutedEventArgs e) => IncreaseValue();
+
 	private void UpdateButtonStates()
 	{
 		OnPropertyChanged(nameof(CanDecrease));
 		OnPropertyChanged(nameof(CanIncrease));
+	}
+
+	private void Grid_PreviewMouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
+	{
+		if (e.Delta > 0)
+			IncreaseValue();
+		else
+			DecreaseValue();
+
+		// Mark the event as handled
+		e.Handled = true;
+		
+		// Give focus to the current slider when the mouse wheel is activated
+		MyMainGrid.Focus();
+	}
+
+	private void Grid_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+	{
+		switch (e.Key)
+		{
+			case Key.Up:
+			case Key.Right:
+				IncreaseValue();
+				e.Handled = true;
+				break;
+
+			case Key.Down:
+			case Key.Left:
+				DecreaseValue();
+				e.Handled = true;
+				break;
+		}
 	}
 }
