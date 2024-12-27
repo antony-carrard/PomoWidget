@@ -13,6 +13,13 @@ public enum TimeState
 }
 public class TimeManager : INotifyPropertyChanged
 {
+	#region Fields
+
+	int _tickTimerInterval = (int)(1000.0/60);  // ms, 60 for 60 refresh per seconds
+	int _lastSecond;
+
+	#endregion
+
 	#region Constructor
 
 	public TimeManager(TimeSpan focusTime, TimeSpan shortBreakTime, TimeSpan longBreakTime, int totalRounds)
@@ -25,9 +32,9 @@ public class TimeManager : INotifyPropertyChanged
 		CurrentInterval = focusTime;
 		StopWatch = new Stopwatch();
 		StateChange += OnStateChange;
-		Timer = new DispatcherTimer
+		Timer = new DispatcherTimer(DispatcherPriority.Render)
 		{
-			Interval = TimeSpan.FromSeconds(1)
+			Interval = TimeSpan.FromMilliseconds(_tickTimerInterval)
 		};
 		Timer.Tick += Timer_Tick;
 	}
@@ -117,6 +124,7 @@ public class TimeManager : INotifyPropertyChanged
 			}
 		}
 	}
+	private int _totalRounds;
 
 	public int CurrentRound { get; set; }
 
@@ -158,9 +166,8 @@ public class TimeManager : INotifyPropertyChanged
 		}
 	}
 	private TimeState _timeState = TimeState.Focus;
-	private int _totalRounds;
 
-	public event EventHandler StateChange;
+	public event EventHandler StateChange; 
 	public event PropertyChangedEventHandler? PropertyChanged;
 
 	#endregion
@@ -190,6 +197,7 @@ public class TimeManager : INotifyPropertyChanged
 		StopWatch?.Start();
 		OnPropertyChanged(nameof(IsTimeRunning));
 	}
+
 	public void Stop()
 	{
 		Timer?.Stop();
@@ -218,12 +226,16 @@ public class TimeManager : INotifyPropertyChanged
 	{
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 	}
+
 	private void Timer_Tick(object? sender, EventArgs e)
 	{
 		if (Complete)
-			NextState();
-		OnPropertyChanged(nameof(RemainingTime));
-		Start(); // TODO rajouter une option pour paramétrer le démarrage automatique
+			NextState(true);
+		if (RemainingTime.Seconds != _lastSecond)
+		{
+			_lastSecond = RemainingTime.Seconds;
+			OnPropertyChanged(nameof(RemainingTime));
+		}
 	}
 
 	#endregion
