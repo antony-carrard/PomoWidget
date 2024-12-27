@@ -174,7 +174,7 @@ public class TimeManager : INotifyPropertyChanged
 
 	#region Methods
 
-	public void NextState()
+	public void NextState(bool showNotification)
 	{
 		switch (TimeState)
 		{
@@ -189,6 +189,8 @@ public class TimeManager : INotifyPropertyChanged
 				TimeState = TimeState.Focus;
 				break;
 		}
+		if (showNotification)
+			Notifications.SendNotification("Time's up!", "Time to ... TODO");	// TODO manage depending of the state
 	}
 
 	public void Start()

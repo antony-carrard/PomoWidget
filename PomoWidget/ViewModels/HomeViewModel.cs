@@ -20,7 +20,7 @@ public class HomeViewModel : ViewModelBase
 		ShortBreakCommand = new RelayCommand(() => TimeManager.TimeState = TimeState.ShortBreak);
 		LongBreakCommand = new RelayCommand(() => TimeManager.TimeState = TimeState.LongBreak);
 		ResetCommand = new RelayCommand(() => TimeManager.Reset());
-		SkipCommand = new RelayCommand(() => TimeManager.NextState());
+		SkipCommand = new RelayCommand(() => TimeManager.NextState(false));
 		StartStopCommand = new RelayCommand(() =>
 		{
 			if (TimeManager.IsTimeRunning)
